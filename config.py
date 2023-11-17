@@ -9,7 +9,7 @@ class Config:
     buffer_mult: int = 384
     lr: float = 1e-5
     num_tokens: int = int(2e9)
-    l1_coeff: float = 3e-4
+    l1_coeff: float = 0.00001
     beta1: float = 0.9
     beta2: float = 0.99
     dict_mult: int = 32

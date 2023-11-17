@@ -8,7 +8,7 @@ import torch.nn.functional as F
 import pprint
 
 DTYPES = {"fp32": torch.float32, "fp16": torch.float16, "bf16": torch.bfloat16}
-
+LOSS = {"mse": F.mse_loss}
 SAVE_DIR = Path("./checkpoints")
 class AutoEncoder(nn.Module):
     def __init__(self, cfg):
@@ -34,9 +34,10 @@ class AutoEncoder(nn.Module):
         acts = F.relu(x_cent @ self.W_enc + self.b_enc)
         x_reconstruct = acts @ self.W_dec + self.b_dec
         l2_loss = (x_reconstruct.float() - x.float()).pow(2).sum(-1).mean(0)
+        mse = F.mse_loss(x_reconstruct.float(), x.float())
         l1_loss = self.l1_coeff * (acts.float().abs().sum())
-        loss = l2_loss + l1_loss
-        return loss, x_reconstruct, acts, l2_loss, l1_loss
+        loss = mse + l1_loss
+        return loss, x_reconstruct, acts, mse, l1_loss
     
     @torch.no_grad()
     def make_decoder_weights_and_grad_unit_norm(self):
