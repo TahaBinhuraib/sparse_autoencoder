@@ -6,14 +6,19 @@ import json
 from pathlib import Path
 import torch.nn.functional as F
 import pprint
+import time
+import os
 
 DTYPES = {"fp32": torch.float32, "fp16": torch.float16, "bf16": torch.bfloat16}
 LOSS = {"mse": F.mse_loss}
-SAVE_DIR = Path("./checkpoints")
+timestr = time.strftime("%Y%m%d-%H%M%S")
+os.makedirs(f"./{timestr}")
+SAVE_DIR = Path(f"./{timestr}")
+
 class AutoEncoder(nn.Module):
     def __init__(self, cfg):
         super().__init__()
-        d_hidden = cfg["latent_dim"]
+        d_hidden = cfg["latent_dim"]*784
         l1_coeff = cfg["l1_coeff"]
         dtype = DTYPES[cfg["enc_dtype"]]
         torch.manual_seed(cfg["seed"])

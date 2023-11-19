@@ -92,7 +92,6 @@ __pycache__
 .DS_Store
 logs
 summary*
-run*
 colabs/dataset/*
 colabs/train_data/*
 colabs/output/*
